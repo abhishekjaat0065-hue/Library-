@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library Management System</title>
+    <style>
+        body{
+            font-family:Arial,sans-serif;
+            background:#f4f4f4;
+        }
+
+        .container{
+            width:80%;
+            margin:auto;
+            margin-top:30px;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+        }
+
+        h1,h2{
+            text-align:center;
+        }
+
+        input{
+            width:28%;
+            padding:10px;
+            margin:5px;
+        }
+
+        button{
+            padding:10px 20px;
+            background:green;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:darkgreen;
+        }
+
+        table{
+            width:100%;
+            margin-top:20px;
+            border-collapse:collapse;
+        }
+
+        table,th,td{
+            border:1px solid black;
+        }
+
+        th,td{
+            padding:10px;
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Library Management System</h1>
+
+    <input type="text" id="title" placeholder="Book Title">
+    <input type="text" id="author" placeholder="Author">
+    <input type="text" id="isbn" placeholder="ISBN">
+
+    <button onclick="addBook()">Add Book</button>
+
+    <h2>Book List</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="bookList"></tbody>
+    </table>
+</div>
+
+<script>
+    let books = [];
+
+    function addBook(){
+        let title = document.getElementById("title").value;
+        let author = document.getElementById("author").value;
+        let isbn = document.getElementById("isbn").value;
+
+        if(title=="" || author=="" || isbn==""){
+            alert("Please fill all fields");
+            return;
+        }
+
+        books.push({
+            title:title,
+            author:author,
+            isbn:isbn,
+            status:"Available"
+        });
+
+        displayBooks();
+
+        document.getElementById("title").value="";
+        document.getElementById("author").value="";
+        document.getElementById("isbn").value="";
+    }
+
+    function displayBooks(){
+        let list=document.getElementById("bookList");
+        list.innerHTML="";
+
+        books.forEach((book,index)=>{
+            list.innerHTML+=`
+            <tr>
+                <td>${book.title}</td>
+                <td>${book.author}</td>
+                <td>${book.isbn}</td>
+                <td>${book.status}</td>
+                <td>
+                    <button onclick="checkoutBook(${index})">Checkout</button>
+                    <button onclick="returnBook(${index})">Return</button>
+                    <button onclick="deleteBook(${index})">Delete</button>
+                </td>
+            </tr>
+            `;
+        });
+    }
+
+    function checkoutBook(index){
+        books[index].status = "Checked Out";
+        displayBooks();
+    }
+
+    function returnBook(index){
+        books[index].status = "Available";
+        displayBooks();
+    }
+
+    function deleteBook(index){
+        books.splice(index, 1);
+        displayBooks();
+    }
+</script>
+
+</body>
+</html>
